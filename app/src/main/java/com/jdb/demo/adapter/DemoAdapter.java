@@ -34,6 +34,7 @@ public class DemoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 	public void setHeaderView(View headerView) {
 		this.mHeaderView = headerView;
 		notifyItemInserted(0);
+
 	}
 
 	public View getHeaderView() {
@@ -102,7 +103,7 @@ public class DemoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			return;
 		}
 
-		int realPosition = getRealPosition(holder);
+		final int realPosition = getRealPosition(holder);
 		final DemoModel.Demo demo = mDemoList.get(realPosition);
 		CommonViewHolder commonViewHolder = (CommonViewHolder) holder;
 		commonViewHolder.tvCommon.setText(demo.content);
@@ -110,8 +111,14 @@ public class DemoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(context, demo.content, Toast.LENGTH_SHORT).show();
+
+				if (onItemClickListener != null) {
+					onItemClickListener.onItemClick(realPosition);
+				}
+
 			}
 		});
+
 	}
 
 	private int getRealPosition(RecyclerView.ViewHolder holder) {
@@ -133,6 +140,17 @@ public class DemoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		public HeaderViewHolder(View itemView) {
 			super(itemView);
 		}
+
+	}
+
+	private OnItemClickListener onItemClickListener;
+
+	public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+		this.onItemClickListener = onItemClickListener;
+	}
+
+	public interface OnItemClickListener {
+		void onItemClick(int position);
 	}
 
 }

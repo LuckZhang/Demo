@@ -1,5 +1,6 @@
 package com.jdb.demo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,12 +12,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jdb.demo.adapter.DemoAdapter;
 import com.jdb.demo.model.DemoModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DemoAdapter.OnItemClickListener {
 	private RecyclerView recyclerView;
 	private static final int MENU_SCROLL_POSITION = 1;
 	private static final int MENU_TYPE_LINEAR = 2;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 		setLinearLayoutManager();
 		mDemoModel = new DemoModel();
 		adapter = new DemoAdapter(this, mDemoModel.demoList);
+		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
 		initHeaderView();
@@ -95,4 +98,12 @@ public class MainActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void onItemClick(int position) {
+		ViewGroup viewGroup = (ViewGroup) layoutManager.findViewByPosition(position + 1);
+		TextView textView = new TextView(this);
+		textView.setText("我是新加的条目");
+		textView.setTextColor(Color.BLUE);
+		viewGroup.addView(textView);
+	}
 }
